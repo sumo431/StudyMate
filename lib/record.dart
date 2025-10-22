@@ -15,6 +15,7 @@ import 'Home.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 
+
 class RecordPage extends StatefulWidget {
   const RecordPage({super.key});
 
@@ -29,41 +30,84 @@ class _RecordPageState extends State<RecordPage> {
   String? _currentFilePath;
 
   Future<void> _saveAsPdf(String transcript, String summary) async {
-    final pdf = pw.Document();
+    try {
+      final pdf = pw.Document();
 
-    pdf.addPage(
-      pw.Page(
-        build: (pw.Context context) => pw.Column(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          children: [
-            pw.SizedBox(height: 20),
-            pw.Text('Summary', style: pw.TextStyle(fontSize: 22, fontWeight: pw.FontWeight.bold)),
-            pw.SizedBox(height: 10),
-            pw.Text(summary, style: pw.TextStyle(fontSize: 12)),
-          ],
+      pdf.addPage(
+        pw.Page(
+          build: (pw.Context context) => pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.SizedBox(height: 20),
+              pw.Text(
+                'Summary',
+                style: pw.TextStyle(
+                  fontSize: 22,
+                  fontWeight: pw.FontWeight.bold,
+                  font: pw.Font.helvetica(), // Unicode 対応なら ttf を指定
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Text(summary, style: pw.TextStyle(fontSize: 12)),
+            ],
+          ),
         ),
-      ),
-    );
+      );
 
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/record_${DateTime.now().millisecondsSinceEpoch}.pdf');
-    await file.writeAsBytes(await pdf.save());
+      // ファイル保存
+      final dir = await getApplicationDocumentsDirectory();
+      final filePath =
+          '${dir.path}/record_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      final file = File(filePath);
 
-    final storageRef = FirebaseStorage.instance
-        .ref()
-        .child('pdfs/${file.uri.pathSegments.last}');
-    await storageRef.putFile(file);
+      await file.writeAsBytes(await pdf.save());
+      if (!await file.exists() || await file.length() == 0) {
+        throw Exception("PDF ファイルの保存に失敗しました。");
+      }
+      print("PDF saved locally: $filePath");
 
-    final downloadUrl = await storageRef.getDownloadURL();
+      // Firebase Storage へのアップロード
+      try {
+        final storageRef =
+        FirebaseStorage.instance.ref().child('pdfs/${p.basename(file.path)}');
 
-    await FirebaseFirestore.instance.collection('pdf_recorder').add({
-      'summary': summary,
-      'timestamp': FieldValue.serverTimestamp(),
-      'url': downloadUrl,
-    });
+        final uploadTask = storageRef.putFile(file);
 
-    print('PDF uploaded to Firebase and Firestore: $downloadUrl');
+        // タスク監視
+        uploadTask.snapshotEvents.listen((event) {
+          print('Upload state: ${event.state}, bytes transferred: ${event.bytesTransferred}');
+        });
+
+        final snapshot = await uploadTask;
+        final downloadUrl = await snapshot.ref.getDownloadURL();
+        print("PDF uploaded successfully! Download URL: $downloadUrl");
+
+        try {
+          await FirebaseFirestore.instance.collection('pdf_recorder').add({
+            'summary': summary,
+            'timestamp': FieldValue.serverTimestamp(),
+            'url': downloadUrl,
+          });
+          print("Firestore record added!");
+        } catch (e) {
+          print("Firestore 登録中にエラー: $e");
+        }
+      } on FirebaseException catch (e) {
+        print("Firebase Storage エラー: ${e.code} - ${e.message}");
+      } catch (e) {
+        print("Storage upload エラー: $e");
+      }
+    } catch (e, stack) {
+      print("PDF 作成・保存・アップロード中にエラー発生: $e");
+      print(stack);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("PDF 保存/アップロード中にエラーが発生しました。")),
+        );
+      }
+    }
   }
+
 
   @override
   void dispose() {

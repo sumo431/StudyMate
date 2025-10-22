@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';Mate
 import 'Bottom/bnb_custom_painter.dart';
 import 'Home.dart';
 import 'record.dart';
 import 'note.dart';
+import 'Quiz_UI.dart';
 
 class AssignmentPage extends StatefulWidget {
   const AssignmentPage({super.key});
@@ -78,7 +79,6 @@ class _AssignmentPageState extends State<AssignmentPage> {
                   ),
                   child: Column(
                     children: [
-                      // 画像部分
                       Expanded(
                         flex: 2,
                         child: ClipRRect(
@@ -93,8 +93,6 @@ class _AssignmentPageState extends State<AssignmentPage> {
                           ),
                         ),
                       ),
-
-                      // タイトル部分
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(6),
@@ -152,8 +150,6 @@ class _AssignmentPageState extends State<AssignmentPage> {
           );
         },
       ),
-
-      // ✅ 画面下のナビゲーションバー
       bottomNavigationBar: Container(
         color: Colors.white10,
         child: Stack(
@@ -165,56 +161,65 @@ class _AssignmentPageState extends State<AssignmentPage> {
             Center(
               heightFactor: 0.6,
               child: FloatingActionButton(
-                onPressed: () async {
+                onPressed: ()async{
                   final result = await Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const NotePage()),
+                    MaterialPageRoute(builder: (context) => const RecordPage()),
                   );
                   if (result != null) {
-                    print("New note added: $result");
+                    print("New note: $result");
                   }
                 },
                 backgroundColor: Colors.orange,
-                child: const Icon(Icons.add),
+                child: Icon(
+                    Icons.mic,
+                    color:Colors.white),
                 elevation: 0.1,
-                shape: const CircleBorder(),
+                shape: CircleBorder(),
               ),
             ),
             SizedBox(
               width: size.width,
               height: 80,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
                 children: [
-                  IconButton(
-                      icon: const Icon(Icons.home),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()),
-                        );
-                      }),
-                  IconButton(
-                      icon: const Icon(Icons.mic),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const RecordPage()),
-                        );
-                      }),
-                  IconButton(
-                      icon: const Icon(Icons.assignment),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AssignmentPage()),
-                        );
-                      }),
-                  IconButton(
-                      icon: const Icon(Icons.person), onPressed: () {}),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: IconButton(icon: Icon(Icons.home), onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const HomePage()),
+                      );
+                    }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 45),
+                    child: IconButton(icon: Icon(Icons.note_add), onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const NotePage()),
+                      );
+                    }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 45),
+                    child: IconButton(icon: Icon(Icons.assignment), onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AssignmentPage()),
+                      );
+                    }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: IconButton(icon: Icon(Icons.person), onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const QuizPage()),
+                      );
+                    }),
+                  ),
                 ],
               ),
             ),

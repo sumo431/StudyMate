@@ -30,19 +30,40 @@ class _NotePageState extends State<NotePage> {
       return;
     }
 
-    // Store Firestore
-    await FirebaseFirestore.instance.collection('notes').add({
-      'Title': noteTitle,
-      'createdAt': FieldValue.serverTimestamp(),
-      'image': selectedImage,
-      'pdfUrl': null
-    });
+    try {
+      // Firestore に追加
+      final docRef = await FirebaseFirestore.instance.collection('notes').add({
+        'Title': noteTitle,
+        'createdAt': FieldValue.serverTimestamp(),
+        'image': selectedImage,
+        'pdfUrl': null,
+      });
 
-    Navigator.pop(context, {
-      'Title': noteTitle,
-      'image': selectedImage,
-    });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Note saved successfully!")),
+      );
+
+      // Navigator で前の画面に戻す
+      Navigator.pop(context, {
+        'id': docRef.id,
+        'Title': noteTitle,
+        'image': selectedImage,
+      });
+
+    } on FirebaseException catch (e) {
+      // Firestore 特有のエラー
+      print("Firestore error: ${e.code} - ${e.message}");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to save note: ${e.code}")),
+      );
+    } catch (e) {
+      print("Unknown error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("An unexpected error occurred.")),
+      );
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
