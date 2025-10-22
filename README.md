@@ -1,12 +1,12 @@
-# capstone_2
+# StudyMate
+Study support app: Efficient review of class content and support for test preparation
 
-A new Flutter project.
+## MVP
+・Record ad transcribe lectures
+・Automatic summaries using Gemini AI -> save to "Note" container
 
-## Getting Started
+### Android Application
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
