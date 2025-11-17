@@ -30,6 +30,25 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  record: ^6.1.2
+  path: ^1.9.1
+  http: ^1.5.0
+  jose: ^0.3.5
+  path_provider: ^2.1.5
+  cloud_firestore: ^6.0.3
+  firebase_storage: ^13.0.3
+  printing: ^5.14.2
+  pdf: ^3.11.3
+  custom_button_builder: ^0.0.4
+  flutter_dotenv: ^6.0.0
+  firebase_core: ^4.1.1
+  firebase_app_check: ^0.4.1+1
+  file_picker: ^10.3.3
+  read_pdf_text: ^0.3.1
+  open_file: ^3.5.10
+  flutter_local_notifications: ^19.5.0
+  timezone: ^0.10.1
+  #firebase_auth: ^6.1.1 not for now
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -37,29 +56,6 @@ dependencies:
 
 dev_dependencies:
   flutter_lints: ^5.0.0
-  cupertino_icons: ^1.0.8
-  speech_to_text: ^7.3.0
-  record: ^6.1.2
-  path_provider: ^2.1.5
-  google_nav_bar: ^5.0.7
-  custom_button_builder: ^0.0.4
-  flutter_sound: ^9.28.0
-  just_audio: ^0.10.5
-  path: ^1.9.1
-  http: ^1.5.0
-  flutter_dotenv: ^6.0.0
-  cloud_firestore: ^6.0.2
-  firebase_core: ^4.1.1
-  jose: ^0.3.5
-  pdf: ^3.11.3
-  printing: ^5.14.2
-  firebase_storage: ^13.0.3
-  io: ^1.0.5
-  open_filex: ^4.7.0
-  firebase_app_check: ^0.4.1+1
-  file_picker: ^10.3.3
-  read_pdf_text: ^0.3.1
-  firebase_auth: ^6.1.1
 
   flutter_test:
     sdk: flutter
@@ -85,6 +81,8 @@ flutter:
     - assets/speech-to-text-key.json
     - assets/image/math.jpg
     - assets/image/music.jpg
+    - assets/image/dog.jpg
+    - assets/image/flowerandgirl.jpg
     - assets/.env
   # To add assets to your application, add an assets section, like this:
   # assets:
