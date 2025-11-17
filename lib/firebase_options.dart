@@ -41,49 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAgdANj3tm66bdPMawrNzprW-K1tuYQeT8',
-    appId: '1:632869261923:web:829bf554077902e1cb5e56',
-    messagingSenderId: '632869261923',
-    projectId: 'capstone-66919',
-    authDomain: 'capstone-66919.firebaseapp.com',
-    storageBucket: 'capstone-66919.firebasestorage.app',
-    measurementId: 'G-MHCGLVVP9H',
+    apiKey: 'AIzaSyC9SDl2CHPVKaL7HZJWva-WosI4xZ3HMgQ',
+    appId: '1:664247167161:web:2d4c9ca409006834481368',
+    messagingSenderId: '664247167161',
+    projectId: 'studymate-36a1d',
+    authDomain: 'studymate-36a1d.firebaseapp.com',
+    storageBucket: 'studymate-36a1d.firebasestorage.app',
+    measurementId: 'G-6HP0XVMGQ5',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDXAgFWjA8NM1-APb7o1nH60ST7FXdaQlA',
-    appId: '1:632869261923:android:ae31ba440869eee7cb5e56',
-    messagingSenderId: '632869261923',
-    projectId: 'capstone-66919',
-    storageBucket: 'capstone-66919.firebasestorage.app',
+    apiKey: 'AIzaSyDzrE9BGGcR-NsMvgaNGFH-529dfVVxeuw',
+    appId: '1:664247167161:android:a9fdfbaa072aed19481368',
+    messagingSenderId: '664247167161',
+    projectId: 'studymate-36a1d',
+    storageBucket: 'studymate-36a1d.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAT9cvk8cn_GwnHRfEbZm6ZMOS59-4oDuY',
-    appId: '1:632869261923:ios:c677894e678b4bc9cb5e56',
-    messagingSenderId: '632869261923',
-    projectId: 'capstone-66919',
-    storageBucket: 'capstone-66919.firebasestorage.app',
+    apiKey: 'AIzaSyCMb4fBIaUkAhd4kDS_u5knWvLWy8RSW6k',
+    appId: '1:664247167161:ios:5a818126c8019228481368',
+    messagingSenderId: '664247167161',
+    projectId: 'studymate-36a1d',
+    storageBucket: 'studymate-36a1d.firebasestorage.app',
     iosBundleId: 'com.example.capstone2',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAT9cvk8cn_GwnHRfEbZm6ZMOS59-4oDuY',
-    appId: '1:632869261923:ios:c677894e678b4bc9cb5e56',
-    messagingSenderId: '632869261923',
-    projectId: 'capstone-66919',
-    storageBucket: 'capstone-66919.firebasestorage.app',
+    apiKey: 'AIzaSyCMb4fBIaUkAhd4kDS_u5knWvLWy8RSW6k',
+    appId: '1:664247167161:ios:5a818126c8019228481368',
+    messagingSenderId: '664247167161',
+    projectId: 'studymate-36a1d',
+    storageBucket: 'studymate-36a1d.firebasestorage.app',
     iosBundleId: 'com.example.capstone2',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAgdANj3tm66bdPMawrNzprW-K1tuYQeT8',
-    appId: '1:632869261923:web:599bc1746ff78da3cb5e56',
-    messagingSenderId: '632869261923',
-    projectId: 'capstone-66919',
-    authDomain: 'capstone-66919.firebaseapp.com',
-    storageBucket: 'capstone-66919.firebasestorage.app',
-    measurementId: 'G-5VWM2RS0R8',
+    apiKey: 'AIzaSyC9SDl2CHPVKaL7HZJWva-WosI4xZ3HMgQ',
+    appId: '1:664247167161:web:be5ff49eea907309481368',
+    messagingSenderId: '664247167161',
+    projectId: 'studymate-36a1d',
+    authDomain: 'studymate-36a1d.firebaseapp.com',
+    storageBucket: 'studymate-36a1d.firebasestorage.app',
+    measurementId: 'G-N2Z997WQG9',
   );
 
 }

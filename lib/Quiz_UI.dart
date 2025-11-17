@@ -4,12 +4,7 @@ import 'package:read_pdf_text/read_pdf_text.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'Bottom/bnb_custom_painter.dart';
-import 'Quiz_UI.dart';
-import 'record.dart';
-import 'note.dart';
-import 'Assignment.dart';
-import 'Home.dart';
+import 'package:capstone_2/button/custom_bottom.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({super.key});
@@ -144,84 +139,7 @@ class _QuizPageState extends State<QuizPage> {
           );
         },
       ),
-      bottomNavigationBar: Container(
-        color: Colors.white10,
-        child: Stack(
-          children: [
-            CustomPaint(
-              size: Size(size.width, 80),
-              painter: BNBCustomPainter(),
-            ),
-            Center(
-              heightFactor: 0.6,
-              child: FloatingActionButton(
-                onPressed: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const RecordPage()),
-                  );
-                  if (result != null) {
-                    print("New note: $result");
-                  }
-                },
-                backgroundColor: Colors.orange,
-                child: const Icon(Icons.mic, color: Colors.white),
-                elevation: 0.1,
-                shape: const CircleBorder(),
-              ),
-            ),
-            SizedBox(
-              width: size.width,
-              height: 80,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: IconButton(
-                      icon: const Icon(Icons.home),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const HomePage()),
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 45),
-                    child: IconButton(
-                      icon: const Icon(Icons.note_add),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const NotePage()),
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 45),
-                    child: IconButton(
-                      icon: const Icon(Icons.assignment),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const AssignmentPage()),
-                        );
-                      },
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 15),
-                    child: Icon(Icons.person),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: const CustomBottomNavBar(),
     );
   }
 }

@@ -1,32 +1,13 @@
 {
   "project_info": {
-    "project_number": "632869261923",
-    "project_id": "capstone-66919",
-    "storage_bucket": "capstone-66919.firebasestorage.app"
+    "project_number": "664247167161",
+    "project_id": "studymate-36a1d",
+    "storage_bucket": "studymate-36a1d.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:632869261923:android:0ac5c1ecae7198aacb5e56",
-        "android_client_info": {
-          "package_name": "com.example.capstone"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDXAgFWjA8NM1-APb7o1nH60ST7FXdaQlA"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:632869261923:android:ae31ba440869eee7cb5e56",
+        "mobilesdk_app_id": "1:664247167161:android:a9fdfbaa072aed19481368",
         "android_client_info": {
           "package_name": "com.example.capstone_2"
         }
@@ -34,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDXAgFWjA8NM1-APb7o1nH60ST7FXdaQlA"
+          "current_key": "AIzaSyDzrE9BGGcR-NsMvgaNGFH-529dfVVxeuw"
         }
       ],
       "services": {
