@@ -10,7 +10,10 @@ Future<void> main() async {
 
   await dotenv.load(fileName: "assets/.env");
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug
   );

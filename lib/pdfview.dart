@@ -28,8 +28,8 @@ class _PdfViewPageState extends State<PdfViewPage> {
           // PDFリスト部分
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
-                .collection('pdfs')
-                .orderBy('createdAt', descending: true)
+                .collection('pdf_recorder')
+                .orderBy('timestamp', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -53,7 +53,7 @@ class _PdfViewPageState extends State<PdfViewPage> {
                 itemBuilder: (context, index) {
                   final pdf = pdfs[index].data() as Map<String, dynamic>;
                   final title = pdf['title'] ?? 'Untitled';
-                  final url = pdf['pdfUrl'];
+                  final url = pdf['url'];
 
                   return Card(
                     margin: const EdgeInsets.all(8),

@@ -87,15 +87,16 @@ class RecordService {
     );
 
     final dir = await getApplicationDocumentsDirectory();
-    final filePath =
-        '${dir.path}/record_${DateTime.now().millisecondsSinceEpoch}.pdf';
+    final fileName = 'record_${DateTime.now().millisecondsSinceEpoch}.pdf';
+    final filePath = '${dir.path}/$fileName';
     final file = File(filePath);
     await file.writeAsBytes(await pdf.save());
 
-    await _uploadToFirebase(file, summary);
+    await _uploadToFirebase(file, summary, fileName);
   }
 
-  Future<void> _uploadToFirebase(File file, String summary) async {
+
+  Future<void> _uploadToFirebase(File file, String summary, String fileName) async {
     final ref =
     FirebaseStorage.instance.ref().child('pdfs/${p.basename(file.path)}');
     final uploadTask = ref.putFile(file);
@@ -103,6 +104,7 @@ class RecordService {
     final url = await snapshot.ref.getDownloadURL();
 
     await FirebaseFirestore.instance.collection('pdf_recorder').add({
+      'title': fileName,
       'summary': summary,
       'timestamp': FieldValue.serverTimestamp(),
       'url': url,
