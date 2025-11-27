@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:capstone_2/button/custom_bottom.dart';
 import 'package:capstone_2/button/togglebutton.dart';
+import 'pdflistpage.dart';
+import 'package:capstone_2/services/noteselect.dart';
 
 class NotesViewPage extends StatefulWidget {
   const NotesViewPage({super.key});
@@ -12,90 +13,8 @@ class NotesViewPage extends StatefulWidget {
 }
 
 class _NotesViewPageState extends State<NotesViewPage> {
-  List<String> selectedPdfs = [];
-
-  Future<void> _showPdfSelectionSheet() async {
-    final ListResult result =
-    await FirebaseStorage.instance.ref('pdfs').listAll();
-
-    final pdfFiles = result.items;
-
-    if (pdfFiles.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("No PDFs found in storage.")),
-      );
-      return;
-    }
-
-    selectedPdfs = [];
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return StatefulBuilder(builder: (context, setState) {
-          return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.7,
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-                const Text(
-                  "Select PDFs",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const Divider(),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: pdfFiles.length,
-                    itemBuilder: (context, index) {
-                      final file = pdfFiles[index];
-                      final isSelected = selectedPdfs.contains(file.name);
-                      return ListTile(
-                        title: Text(file.name),
-                        trailing: isSelected
-                            ? const Icon(Icons.check_circle, color: Colors.orange)
-                            : const Icon(Icons.circle_outlined),
-                        onTap: () {
-                          setState(() {
-                            if (isSelected) {
-                              selectedPdfs.remove(file.name);
-                            } else {
-                              selectedPdfs.add(file.name);
-                            }
-                          });
-                        },
-                      );
-                    },
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                          content: Text(
-                              "Selected PDFs: ${selectedPdfs.join(', ')}")),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 12)),
-                  child: const Text("Confirm Selection"),
-                ),
-                const SizedBox(height: 20),
-              ],
-            ),
-          );
-        });
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -140,68 +59,65 @@ class _NotesViewPageState extends State<NotesViewPage> {
                     childAspectRatio: 0.7,
                   ),
                   itemBuilder: (context, index) {
-                    final note = notes[index].data() as Map<String, dynamic>;
-                    final pdfUrl = note['pdfUrl'];
+                    final doc = notes[index];
+                    final note = doc.data() as Map<String, dynamic>;
                     final image = note['image'];
-                    final title = note['title'];
+                    final title = note['Title'];
 
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
+                    return InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => PdfListPage(noteId: doc.id),
                           ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                topRight: Radius.circular(12),
-                              ),
-                              child: Image.asset(
-                                image ?? 'assets/image/math.jpg',
-                                width: double.infinity,
-                                fit: BoxFit.cover,
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                ),
+                                child: Image.asset(
+                                  image ?? 'assets/image/candy.jpg',
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(6),
-                            color: Colors.orangeAccent,
-                            child: Text(
-                              title ?? 'Untitled',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(6),
+                              color: Colors.orangeAccent,
+                              child: Text(
+                                title ?? 'Untitled',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6.0),
-                            child: ElevatedButton.icon(
-                              onPressed: _showPdfSelectionSheet,
-                              icon: const Icon(Icons.add_circle_outline,
-                                  color: Colors.white),
-                              label: const Text('Add PDF',
-                                  style: TextStyle(color: Colors.white)),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.orange,
-                                minimumSize: const Size(100, 35),
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -209,6 +125,8 @@ class _NotesViewPageState extends State<NotesViewPage> {
               );
             },
           ),
+
+          // ToggleButton
           Positioned(
             bottom: 80,
             left: 0,
@@ -216,6 +134,17 @@ class _NotesViewPageState extends State<NotesViewPage> {
             child: Center(child: ToggleButton()),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const NotesSelectPage()),
+          );
+        },
+        backgroundColor: Colors.orange,
+        foregroundColor: Colors.white,
+        child: const Icon(Icons.add),
       ),
       bottomNavigationBar: const CustomBottomNavBar(),
     );

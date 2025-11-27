@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:capstone_2/button/togglebutton.dart';
 import 'package:capstone_2/button/custom_bottom.dart';
-import 'package:open_file/open_file.dart';
+import 'Pdf_viewer.dart';
 
 class PdfViewPage extends StatefulWidget {
   const PdfViewPage({super.key});
@@ -15,17 +15,12 @@ class _PdfViewPageState extends State<PdfViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'My PDFs',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.orangeAccent,
-        centerTitle: true,
-      ),
       body: Stack(
         children: [
-          // PDFリスト部分
+          Text(
+            'My PDFs',
+            style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
+          ),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('pdf_recorder')
@@ -64,9 +59,17 @@ class _PdfViewPageState extends State<PdfViewPage> {
                         url ?? '',
                         style: const TextStyle(color: Colors.grey, fontSize: 12),
                       ),
-                      onTap: () async {
+                      onTap: () {
                         if (url != null) {
-                          await OpenFile.open(url);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => PdfViewerPage(
+                                url: url,
+                                title: title,
+                              ),
+                            ),
+                          );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text("PDF URL not found.")),
@@ -79,6 +82,7 @@ class _PdfViewPageState extends State<PdfViewPage> {
               );
             },
           ),
+
           Positioned(
             bottom: 80,
             left: 0,

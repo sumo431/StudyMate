@@ -14,8 +14,10 @@ class _SaveNotePageState extends State<SaveNotePage> {
   String? selectedImage;
 
   final List<String> availableImages = [
-    'assets/image/math.jpg',
-    'assets/image/music.jpg',
+    'assets/image/candy.jpg',
+    'assets/image/coffee.jpg',
+    'assets/image/llama.jpg',
+    'assets/image/paint.jpg',
     'assets/image/dog.jpg',
     'assets/image/flowerandgirl.jpg',
   ];
