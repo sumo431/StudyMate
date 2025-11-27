@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'HorizontalCardlist.dart' as hc;
 import 'package:capstone_2/button/bnb_custom_painter.dart';
-import 'Quiz_UI.dart';
 import 'record.dart';
 import 'savenote.dart';
-import 'notesview.dart';
+import 'package:capstone_2/notesview.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -146,12 +145,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 15),
-                    child: IconButton(icon: Icon(Icons.person), onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const QuizPage()),
-                      );
-                    }),
+                    child: IconButton(icon: Icon(Icons.person), onPressed: () {}),
                   ),
                 ],
               ),

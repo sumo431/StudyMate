@@ -6,6 +6,7 @@ import 'package:record/record.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'transcribe_service.dart';
 import 'summarize.dart';
@@ -19,6 +20,7 @@ class RecordService {
 
   Future<String> _getNewFilePath() async {
     final dir = await getApplicationDocumentsDirectory();
+    await Directory(dir.path).create(recursive: true);
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final path = p.join(dir.path, "chunk_$timestamp.wav");
     _audioChunks.add(path);
@@ -63,7 +65,9 @@ class RecordService {
   }
 
   Future<void> processRecording() async {
-    final transcript = await transcribeAllChunks(_audioChunks);
+    final chunksCopy = List<String>.from(_audioChunks);
+
+    final transcript = await transcribeAllChunks(chunksCopy);
     final summary = await summarizeText(transcript);
     await _saveAsPdf(transcript, summary);
   }
@@ -71,9 +75,10 @@ class RecordService {
   Future<void> _saveAsPdf(String transcript, String summary) async {
     final pdf = pw.Document();
 
+    // Summary page
     pdf.addPage(
       pw.Page(
-        build: (pw.Context context) => pw.Column(
+        build: (_) => pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
             pw.Text('Summary',
@@ -86,28 +91,44 @@ class RecordService {
       ),
     );
 
+    // Transcript page
+    pdf.addPage(
+      pw.Page(
+        build: (_) => pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.Text('Transcript',
+                style: pw.TextStyle(
+                    fontSize: 22, fontWeight: pw.FontWeight.bold)),
+            pw.SizedBox(height: 10),
+            pw.Text(transcript, style: const pw.TextStyle(fontSize: 11)),
+          ],
+        ),
+      ),
+    );
+
+    // Save
     final dir = await getApplicationDocumentsDirectory();
-    final fileName = 'record_${DateTime.now().millisecondsSinceEpoch}.pdf';
+    final now = DateTime.now();
+    final fileName = "record_${now.toIso8601String().replaceAll(':','-')}.pdf";
     final filePath = '${dir.path}/$fileName';
     final file = File(filePath);
     await file.writeAsBytes(await pdf.save());
 
-    await _uploadToFirebase(file, summary, fileName);
-  }
-
-
-  Future<void> _uploadToFirebase(File file, String summary, String fileName) async {
-    final ref =
-    FirebaseStorage.instance.ref().child('pdfs/${p.basename(file.path)}');
-    final uploadTask = ref.putFile(file);
-    final snapshot = await uploadTask;
+    // Upload
+    final ref = FirebaseStorage.instance.ref().child('pdf_recorder/$fileName');
+    final snapshot = await ref.putFile(file);
     final url = await snapshot.ref.getDownloadURL();
 
+    // Firestore save
+    final user = FirebaseAuth.instance.currentUser;
     await FirebaseFirestore.instance.collection('pdf_recorder').add({
       'title': fileName,
       'summary': summary,
+      'transcript': transcript,
       'timestamp': FieldValue.serverTimestamp(),
       'url': url,
+      'uid': user?.uid,
     });
   }
 }

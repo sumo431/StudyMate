@@ -27,21 +27,17 @@ class _ToggleButtonState extends State<ToggleButton> {
       notesColor = isNotes ? selectedColor : normalColor;
       pdfColor = isNotes ? normalColor : selectedColor;
     });
-
-    // アニメーション後に画面遷移
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (isNotes) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const NotesViewPage()),
-        );
-      } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const PdfViewPage()),
-        );
-      }
-    });
+    if (isNotes) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const NotesViewPage()),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const PdfViewPage()),
+      );
+    }
   }
 
   @override
