@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:capstone_2/notesview.dart';
-import 'package:capstone_2/pdfview.dart';
-import 'package:capstone_2/quiz_play.dart';
+import 'package:capstone_2/makequiz.dart';
+import 'package:capstone_2/savenote.dart';
 
 class ToggleButton extends StatefulWidget {
   const ToggleButton({super.key});
@@ -12,39 +11,33 @@ class ToggleButton extends StatefulWidget {
 
 const double width = 300.0;
 const double height = 60.0;
+const double loginAlign = -1;
+const double signInAlign = 1;
 const Color selectedColor = Colors.white;
 const Color normalColor = Colors.black54;
 
 class _ToggleButtonState extends State<ToggleButton> {
-  double xAlign = -1;
+  double xAlign = loginAlign;
   Color notesColor = selectedColor;
   Color pdfColor = normalColor;
-  Color settingsColor = normalColor;
 
-  void _switchTab(double align, int tabIndex) {
+  void _switchTab(double align, bool isNotes) {
     setState(() {
       xAlign = align;
-      notesColor = tabIndex == 0 ? selectedColor : normalColor;
-      pdfColor = tabIndex == 1 ? selectedColor : normalColor;
-      settingsColor = tabIndex == 2 ? selectedColor : normalColor;
+      notesColor = isNotes ? selectedColor : normalColor;
+      pdfColor = isNotes ? normalColor : selectedColor;
     });
-
-    Widget page;
-    switch (tabIndex) {
-    case 0:
-    page = const NotesViewPage();
-    break;
-    case 1:
-    page = const PdfViewPage();
-    break;
-    case 2:
-    default:
-    page = const QuizPlayPage(quizId:"NLa2A6YEOvxSed8VGnoz");
+    if (isNotes) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SaveNotePage()),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const PdfQuizPage()),
+      );
     }
-    Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => page),
-    );
   }
 
   @override
@@ -59,13 +52,12 @@ class _ToggleButtonState extends State<ToggleButton> {
         ),
         child: Stack(
           children: [
-// スライドする選択インジケータ
             AnimatedAlign(
               alignment: Alignment(xAlign, 0),
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               child: Container(
-                width: width / 3,
+                width: width * 0.5,
                 height: height,
                 decoration: BoxDecoration(
                   color: Colors.orangeAccent,
@@ -73,13 +65,13 @@ class _ToggleButtonState extends State<ToggleButton> {
                 ),
               ),
             ),
-// Notes ボタン
+            // Notes ボタン
             GestureDetector(
-              onTap: () => _switchTab(-1, 0),
+              onTap: () => _switchTab(loginAlign, true),
               child: Align(
                 alignment: const Alignment(-1, 0),
                 child: Container(
-                  width: width / 3,
+                  width: width * 0.5,
                   alignment: Alignment.center,
                   color: Colors.transparent,
                   child: Text(
@@ -92,37 +84,18 @@ class _ToggleButtonState extends State<ToggleButton> {
                 ),
               ),
             ),
-// PDFs ボタン
             GestureDetector(
-              onTap: () => _switchTab(0, 1),
-              child: Align(
-                alignment: const Alignment(0, 0),
-                child: Container(
-                  width: width / 3,
-                  alignment: Alignment.center,
-                  color: Colors.transparent,
-                  child: Text(
-                    'PDFs',
-                    style: TextStyle(
-                      color: pdfColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () => _switchTab(1, 2),
+              onTap: () => _switchTab(signInAlign, false),
               child: Align(
                 alignment: const Alignment(1, 0),
                 child: Container(
-                  width: width / 3,
+                  width: width * 0.5,
                   alignment: Alignment.center,
                   color: Colors.transparent,
                   child: Text(
-                    'Settings',
+                    'Quiz',
                     style: TextStyle(
-                      color: settingsColor,
+                      color: pdfColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

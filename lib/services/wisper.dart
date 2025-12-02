@@ -19,7 +19,7 @@ Future<String> transcribeAudio(File audioFile) async {
   })));
 
   final iat = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-  final exp = iat + 3600; // 1時間有効
+  final exp = iat + 3600;
 
   final jwtClaimSet = base64UrlEncode(utf8.encode(json.encode({
     'iss': clientEmail,

@@ -29,7 +29,7 @@ class PdfGenerator {
       );
 
       final dir = await getApplicationDocumentsDirectory();
-      final safeTitle = title.replaceAll(RegExp(r'[^\w\s-]'), '_'); // ファイル名安全化
+      final safeTitle = title.replaceAll(RegExp(r'[^\w\s-]'), '_');
       final file = File('${dir.path}/$safeTitle.pdf');
 
       await file.writeAsBytes(await pdf.save());
