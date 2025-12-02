@@ -125,9 +125,7 @@ class _NotesSelectPageState extends State<NotesSelectPage> {
                   ),
                 );
               }
-
               final notes = snapshot.data!.docs;
-
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GridView.builder(
@@ -156,58 +154,89 @@ class _NotesSelectPageState extends State<NotesSelectPage> {
                           ),
                         ],
                       ),
-                      child: Column(
+                      child: Stack( // Stackを追加
                         children: [
-                          Expanded(
-                            flex: 2,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                topRight: Radius.circular(12),
+                          Column(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    topRight: Radius.circular(12),
+                                  ),
+                                  child: Image.asset(
+                                    image ?? 'assets/image/candy.jpg',
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
-                              child: Image.asset(
-                                image ?? 'assets/image/candy.jpg',
+                              Container(
                                 width: double.infinity,
-                                fit: BoxFit.cover,
+                                padding: const EdgeInsets.all(6),
+                                color: Colors.orangeAccent,
+                                child: Text(
+                                  title ?? 'Untitled',
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(6),
-                            color: Colors.orangeAccent,
-                            child: Text(
-                              title ?? 'Untitled',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                                child: ElevatedButton.icon(
+                                  onPressed: () async {
+                                    final selectedPdfs = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PdfSelectPage(noteId: notes[index].id),
+                                      ),
+                                    );
+                                    if (selectedPdfs != null && selectedPdfs.isNotEmpty) {
+                                      await FirebaseFirestore.instance
+                                          .collection('notes')
+                                          .doc(notes[index].id)
+                                          .update({'pdfs': selectedPdfs});
+                                    }
+                                  },
+                                  icon: const Icon(Icons.add_circle_outline, color: Colors.white),
+                                  label: const Text('Add PDF', style: TextStyle(color: Colors.white)),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.orange,
+                                    minimumSize: const Size(100, 35),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6.0),
-                            child: ElevatedButton.icon(
-                              onPressed: () async{
-                                final selectedPdfs = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => PdfSelectPage(noteId: notes[index].id)),
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: GestureDetector(
+                              onTap: () async {
+                                await FirebaseFirestore.instance
+                                    .collection('notes')
+                                    .doc(notes[index].id)
+                                    .delete();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text("Note deleted")),
                                 );
-                                if (selectedPdfs != null && selectedPdfs.isNotEmpty) {
-                                  await FirebaseFirestore.instance
-                                      .collection('notes')
-                                      .doc(notes[index].id)
-                                      .update({'pdfs': selectedPdfs});
-                                }
                               },
-                              icon: const Icon(Icons.add_circle_outline,
-                                  color: Colors.white),
-                              label: const Text('Add PDF',
-                                  style: TextStyle(color: Colors.white)),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.orange,
-                                minimumSize: const Size(100, 35),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                                padding: const EdgeInsets.all(8),
+                                child: const Icon(
+                                  Icons.delete,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
                               ),
                             ),
                           ),
