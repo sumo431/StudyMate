@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:open_file/open_file.dart';
+import 'package:capstone_2/Pdf_viewer.dart';
 
 class PdfListPage extends StatelessWidget {
   final String noteId;
@@ -25,10 +25,10 @@ class PdfListPage extends StatelessWidget {
           }
 
           final data = snapshot.data!.data() as Map<String, dynamic>;
-          List<dynamic> pdfs = data['pdfs'] ?? [];
+          final String title = data['title'] ?? "Untitled";
+          final List<dynamic> pdfs = data['pdfs'] ?? [];
 
-          // 🔥 新しい順にする
-          pdfs = pdfs.reversed.toList();
+          //pdfs = pdfs.reversed.toList();
 
           if (pdfs.isEmpty) {
             return const Center(
@@ -39,14 +39,29 @@ class PdfListPage extends StatelessWidget {
           return ListView.builder(
             itemCount: pdfs.length,
             itemBuilder: (context, index) {
-              final pdfUrl = pdfs[index];
+              final url = pdfs[index] as String;
 
-              return ListTile(
-                leading: const Icon(Icons.picture_as_pdf, color: Colors.red),
-                title: Text("PDF ${index + 1}"),
-                onTap: () async {
-                  await OpenFile.open(pdfUrl);
-                },
+              return Card(
+                margin: const EdgeInsets.all(8),
+                child: ListTile(
+                  leading: const Icon(Icons.picture_as_pdf, color: Colors.red),
+                  title: Text(title),
+                  subtitle: Text(
+                    url ?? '',
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                  onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PdfViewerPage(
+                            url: url,
+                            title: title,
+                          ),
+                        ),
+                      );
+                  },
+                ),
               );
             },
           );

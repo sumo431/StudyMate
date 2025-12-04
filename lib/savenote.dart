@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:capstone_2/button/custom_bottom.dart';
+import 'package:capstone_2/button/togglebutton_make.dart';
 
 class SaveNotePage extends StatefulWidget {
   const SaveNotePage({super.key});
@@ -35,7 +36,7 @@ class _SaveNotePageState extends State<SaveNotePage> {
         'Title': _titleController.text,
         'createdAt': FieldValue.serverTimestamp(),
         'image': selectedImage,
-        'pdfUrl': null,
+        'pdfs': [],
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -129,6 +130,8 @@ class _SaveNotePageState extends State<SaveNotePage> {
               ),
               child: const Text('Save Note'),
             ),
+            SizedBox(height:100),
+            ToggleButton(),
           ],
         ),
       ),

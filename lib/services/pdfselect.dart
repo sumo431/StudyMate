@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:capstone_2/notesview.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PdfSelectPage extends StatefulWidget {
   final String noteId;
@@ -87,6 +88,12 @@ class _PdfSelectPageState extends State<PdfSelectPage> {
           for (var ref in selectedPdfRefs) {
             final url = await _getDownloadUrl(ref);
             if (url != null) urls.add(url);
+          }
+          if (urls.isNotEmpty) {
+            final noteDoc = FirebaseFirestore.instance.collection('notes').doc(widget.noteId);
+            await noteDoc.update({
+              'pdfs': FieldValue.arrayUnion(urls),
+            });
           }
           Navigator.push(
             context,

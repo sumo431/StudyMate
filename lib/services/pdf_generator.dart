@@ -29,7 +29,7 @@ class PdfGenerator {
       );
 
       final dir = await getApplicationDocumentsDirectory();
-      final safeTitle = title.replaceAll(RegExp(r'[^\w\s-]'), '_'); // ファイル名安全化
+      final safeTitle = title.replaceAll(RegExp(r'[^\w\s-]'), '_');
       final file = File('${dir.path}/$safeTitle.pdf');
 
       await file.writeAsBytes(await pdf.save());
@@ -47,7 +47,6 @@ class PdfGenerator {
     }
   }
 
-  /// PDF を Firebase Storage にアップロードする
   static Future<String?> uploadToFirebase(File pdfFile, String noteId) async {
     try {
       final ref = FirebaseStorage.instance.ref().child('notes/$noteId.pdf');
@@ -56,10 +55,10 @@ class PdfGenerator {
       final snapshot = await uploadTask;
       final url = await snapshot.ref.getDownloadURL();
 
-      print('アップロード成功: $url');
+      print('Success Upload: $url');
       return url;
     } catch (e) {
-      print('Firebase アップロード中にエラー: $e');
+      print('Error during update to Firebase: $e');
       return null;
     }
   }

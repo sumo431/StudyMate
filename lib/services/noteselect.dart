@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+/*import 'package:firebase_storage/firebase_storage.dart';*/
 import 'package:capstone_2/services/pdfselect.dart';
 
 class NotesSelectPage extends StatefulWidget {
@@ -13,7 +13,7 @@ class NotesSelectPage extends StatefulWidget {
 class _NotesSelectPageState extends State<NotesSelectPage> {
   List<String> selectedPdfs = [];
 
-  Future<void> _showPdfSelectionSheet() async {
+  /*Future<void> _showPdfSelectionSheet() async {
     final ListResult result =
     await FirebaseStorage.instance.ref('pdfs').listAll();
 
@@ -89,7 +89,7 @@ class _NotesSelectPageState extends State<NotesSelectPage> {
         });
       },
     );
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +140,7 @@ class _NotesSelectPageState extends State<NotesSelectPage> {
                   ),
                   itemBuilder: (context, index) {
                     final note = notes[index].data() as Map<String, dynamic>;
-                    final pdfUrl = note['pdfUrl'];
+                    //final pdfUrl = note['pdfUrl'];
                     final image = note['image'];
                     final title = note['Title'];
 

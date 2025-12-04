@@ -7,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'transcribe_service.dart';
 import 'summarize.dart';
 
