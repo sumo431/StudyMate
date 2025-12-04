@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:capstone_2/services/recordactivity.dart';
 
 class QuizPlayPage extends StatefulWidget {
-  final String? quizId;
+  final String quizId;
 
   const QuizPlayPage({super.key, required this.quizId});
 
@@ -14,72 +14,99 @@ class QuizPlayPage extends StatefulWidget {
 class _QuizPlayPageState extends State<QuizPlayPage> {
   int current = 0;
   int score = 0;
+  int highScore = 0;
 
   @override
   Widget build(BuildContext context) {
-    if (widget.quizId == null || widget.quizId!.isEmpty) {
-      return Scaffold(
-        appBar: AppBar(title: const Text("Quiz")),
-        body: const Center(child: Text("Quiz ID is missing.")),
-      );
-    }
-
     return FutureBuilder<DocumentSnapshot>(
       future: FirebaseFirestore.instance
           .collection('quizzes')
           .doc(widget.quizId)
           .get(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (!snapshot.hasData) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }
 
-        if (!snapshot.hasData || !snapshot.data!.exists) {
+        if (!snapshot.data!.exists) {
           return const Scaffold(
-            body: Center(child: Text("Quiz not found.")),
+            body: Center(child: Text("Quiz not found")),
           );
         }
 
         final data = snapshot.data!;
-        final List<String> questions =
-        List<String>.from(data['questions'] ?? []);
+        final List<Map<String, dynamic>> questions =
+        List<Map<String, dynamic>>.from(data['questions'] ?? []);
+        highScore = data['highScore'] ?? 0;
 
         if (questions.isEmpty) {
           return Scaffold(
             appBar: AppBar(title: Text(data['title'] ?? "Quiz")),
-            body: const Center(child: Text("No questions available.")),
+            body: const Center(child: Text("No questions available")),
           );
         }
 
-        final String q = questions[current];
+        final question = questions[current];
 
         return Scaffold(
-          appBar: AppBar(title: Text(data['title'] ?? "Quiz")),
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.orangeAccent,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(data['title'] ?? "Quiz"),
+                Text("High: $highScore",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16)),
+              ],
+            ),
+          ),
           body: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Q${current + 1}: $q",
-                  style: const TextStyle(fontSize: 20),
+                  "Q${current + 1}: ${question['question']}",
+                  style: const TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 20),
-                ...List.generate(4, (i) {
+                const SizedBox(height: 30),
+                ...List.generate(question['choices'].length, (i) {
+                  final choiceText = question['choices'][i];
+                  final answerIndex = question['answerIndex'];
+
                   return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (i == 0) score++;
-                        if (current < questions.length - 1) {
-                          setState(() => current++);
-                        } else {
-                          finishQuiz(score, questions.length, data);
-                        }
-                      },
-                      child: Text(String.fromCharCode(65 + i)),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 60,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (i == answerIndex) score++;
+                          if (current < questions.length - 1) {
+                            setState(() => current++);
+                          } else {
+                            finishQuiz(score, questions.length, data);
+                          }
+                        },
+                        child: Text(
+                          choiceText,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
                   );
                 }),
@@ -92,27 +119,33 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
   }
 
   void finishQuiz(int score, int total, DocumentSnapshot quiz) async {
-    if (quiz.data() != null &&
-        (quiz['highScore'] == null || score > quiz['highScore'])) {
+    final quizData = quiz.data() as Map<String, dynamic>?;
+    if (quizData != null &&
+        (quizData['highScore'] == null || score > quizData['highScore'])) {
       await quiz.reference.update({'highScore': score});
     }
 
-    recordUserActivity();
+    await recordUserActivity();
 
     if (!mounted) return;
 
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Result"),
-        content: Text("$score / $total"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("OK"),
-          )
-        ],
-      ),
+      barrierDismissible: false,
+      builder: (_) =>
+          AlertDialog(
+            title: const Text("Result"),
+            content: Text("$score / $total"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
     );
   }
 }

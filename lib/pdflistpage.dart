@@ -25,7 +25,7 @@ class PdfListPage extends StatelessWidget {
           }
 
           final data = snapshot.data!.data() as Map<String, dynamic>;
-          final String title = data['title'] ?? "Untitled";
+          //final String title = data['title'] ?? 'Untitled';
           final List<dynamic> pdfs = data['pdfs'] ?? [];
 
           //pdfs = pdfs.reversed.toList();
@@ -40,16 +40,13 @@ class PdfListPage extends StatelessWidget {
             itemCount: pdfs.length,
             itemBuilder: (context, index) {
               final url = pdfs[index] as String;
+              final title = data['title'] ?? 'Untitled';
 
               return Card(
                 margin: const EdgeInsets.all(8),
                 child: ListTile(
                   leading: const Icon(Icons.picture_as_pdf, color: Colors.red),
                   title: Text(title),
-                  subtitle: Text(
-                    url ?? '',
-                    style: const TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
                   onTap: () {
                       Navigator.push(
                         context,
