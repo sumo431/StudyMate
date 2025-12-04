@@ -47,7 +47,6 @@ class PdfGenerator {
     }
   }
 
-  /// PDF を Firebase Storage にアップロードする
   static Future<String?> uploadToFirebase(File pdfFile, String noteId) async {
     try {
       final ref = FirebaseStorage.instance.ref().child('notes/$noteId.pdf');
@@ -56,10 +55,10 @@ class PdfGenerator {
       final snapshot = await uploadTask;
       final url = await snapshot.ref.getDownloadURL();
 
-      print('アップロード成功: $url');
+      print('Success Upload: $url');
       return url;
     } catch (e) {
-      print('Firebase アップロード中にエラー: $e');
+      print('Error during update to Firebase: $e');
       return null;
     }
   }

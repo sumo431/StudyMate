@@ -43,7 +43,6 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
         }
 
         final data = snapshot.data!;
-        // 保存されているのは List<String> のはず
         final List<String> questions =
         List<String>.from(data['questions'] ?? []);
 
@@ -54,7 +53,6 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
           );
         }
 
-        // 現在の質問（文字列のみ）
         final String q = questions[current];
 
         return Scaffold(
@@ -74,7 +72,6 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        // 今回は正解は固定で0番目と仮定
                         if (i == 0) score++;
                         if (current < questions.length - 1) {
                           setState(() => current++);

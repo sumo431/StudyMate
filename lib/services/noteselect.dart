@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+/*import 'package:firebase_storage/firebase_storage.dart';*/
 import 'package:capstone_2/services/pdfselect.dart';
 
 class NotesSelectPage extends StatefulWidget {
@@ -13,7 +13,7 @@ class NotesSelectPage extends StatefulWidget {
 class _NotesSelectPageState extends State<NotesSelectPage> {
   List<String> selectedPdfs = [];
 
-  Future<void> _showPdfSelectionSheet() async {
+  /*Future<void> _showPdfSelectionSheet() async {
     final ListResult result =
     await FirebaseStorage.instance.ref('pdfs').listAll();
 
@@ -89,7 +89,7 @@ class _NotesSelectPageState extends State<NotesSelectPage> {
         });
       },
     );
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +125,9 @@ class _NotesSelectPageState extends State<NotesSelectPage> {
                   ),
                 );
               }
+
               final notes = snapshot.data!.docs;
+
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GridView.builder(
@@ -138,7 +140,7 @@ class _NotesSelectPageState extends State<NotesSelectPage> {
                   ),
                   itemBuilder: (context, index) {
                     final note = notes[index].data() as Map<String, dynamic>;
-                    final pdfUrl = note['pdfUrl'];
+                    //final pdfUrl = note['pdfUrl'];
                     final image = note['image'];
                     final title = note['Title'];
 
@@ -154,89 +156,58 @@ class _NotesSelectPageState extends State<NotesSelectPage> {
                           ),
                         ],
                       ),
-                      child: Stack( // Stackを追加
+                      child: Column(
                         children: [
-                          Column(
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(12),
-                                    topRight: Radius.circular(12),
-                                  ),
-                                  child: Image.asset(
-                                    image ?? 'assets/image/candy.jpg',
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                          Expanded(
+                            flex: 2,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                topRight: Radius.circular(12),
                               ),
-                              Container(
+                              child: Image.asset(
+                                image ?? 'assets/image/candy.jpg',
                                 width: double.infinity,
-                                padding: const EdgeInsets.all(6),
-                                color: Colors.orangeAccent,
-                                child: Text(
-                                  title ?? 'Untitled',
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                ),
+                                fit: BoxFit.cover,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 6.0),
-                                child: ElevatedButton.icon(
-                                  onPressed: () async {
-                                    final selectedPdfs = await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => PdfSelectPage(noteId: notes[index].id),
-                                      ),
-                                    );
-                                    if (selectedPdfs != null && selectedPdfs.isNotEmpty) {
-                                      await FirebaseFirestore.instance
-                                          .collection('notes')
-                                          .doc(notes[index].id)
-                                          .update({'pdfs': selectedPdfs});
-                                    }
-                                  },
-                                  icon: const Icon(Icons.add_circle_outline, color: Colors.white),
-                                  label: const Text('Add PDF', style: TextStyle(color: Colors.white)),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.orange,
-                                    minimumSize: const Size(100, 35),
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                          Positioned(
-                            top: 8,
-                            right: 8,
-                            child: GestureDetector(
-                              onTap: () async {
-                                await FirebaseFirestore.instance
-                                    .collection('notes')
-                                    .doc(notes[index].id)
-                                    .delete();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text("Note deleted")),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(6),
+                            color: Colors.orangeAccent,
+                            child: Text(
+                              title ?? 'Untitled',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6.0),
+                            child: ElevatedButton.icon(
+                              onPressed: () async{
+                                final selectedPdfs = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => PdfSelectPage(noteId: notes[index].id)),
                                 );
+                                if (selectedPdfs != null && selectedPdfs.isNotEmpty) {
+                                  await FirebaseFirestore.instance
+                                      .collection('notes')
+                                      .doc(notes[index].id)
+                                      .update({'pdfs': selectedPdfs});
+                                }
                               },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  shape: BoxShape.circle,
-                                ),
-                                padding: const EdgeInsets.all(8),
-                                child: const Icon(
-                                  Icons.delete,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
+                              icon: const Icon(Icons.add_circle_outline,
+                                  color: Colors.white),
+                              label: const Text('Add PDF',
+                                  style: TextStyle(color: Colors.white)),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.orange,
+                                minimumSize: const Size(100, 35),
                               ),
                             ),
                           ),

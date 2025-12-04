@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capstone_2/notesview.dart';
 import 'package:capstone_2/pdfview.dart';
-import 'package:capstone_2/quiz_play.dart';
+import 'package:capstone_2/quizlist.dart';
 
 class ToggleButton extends StatefulWidget {
   const ToggleButton({super.key});
@@ -29,21 +29,21 @@ class _ToggleButtonState extends State<ToggleButton> {
       settingsColor = tabIndex == 2 ? selectedColor : normalColor;
     });
 
-    Widget page;
+    Widget page = const NotesViewPage();
     switch (tabIndex) {
     case 0:
-    page = const NotesViewPage();
-    break;
+      page = NotesViewPage();
+      break;
     case 1:
-    page = const PdfViewPage();
-    break;
+      page = PdfViewPage();
+      break;
     case 2:
-    default:
-    page = const QuizPlayPage(quizId:"NLa2A6YEOvxSed8VGnoz");
+      page = QuizListPage();
+      break;
     }
     Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => page),
+      context,
+      MaterialPageRoute(builder: (context) => page),
     );
   }
 
@@ -59,7 +59,6 @@ class _ToggleButtonState extends State<ToggleButton> {
         ),
         child: Stack(
           children: [
-// スライドする選択インジケータ
             AnimatedAlign(
               alignment: Alignment(xAlign, 0),
               duration: const Duration(milliseconds: 300),
@@ -73,7 +72,6 @@ class _ToggleButtonState extends State<ToggleButton> {
                 ),
               ),
             ),
-// Notes ボタン
             GestureDetector(
               onTap: () => _switchTab(-1, 0),
               child: Align(
@@ -92,7 +90,6 @@ class _ToggleButtonState extends State<ToggleButton> {
                 ),
               ),
             ),
-// PDFs ボタン
             GestureDetector(
               onTap: () => _switchTab(0, 1),
               child: Align(
@@ -120,7 +117,7 @@ class _ToggleButtonState extends State<ToggleButton> {
                   alignment: Alignment.center,
                   color: Colors.transparent,
                   child: Text(
-                    'Settings',
+                    'Quiz',
                     style: TextStyle(
                       color: settingsColor,
                       fontWeight: FontWeight.bold,
