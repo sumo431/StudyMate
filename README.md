@@ -13,7 +13,8 @@ Study support app: Efficient review of class content and support for test prepar
 
 Opptional Product
 ・Progress Visualization
-  --Graph-- display study time, accuracy rate, and proficiency by subject area.
+  -Graph- display study time, accuracy rate, and proficiency by subject area.
+  
   changed graph to check list
 
 ### Android Application
