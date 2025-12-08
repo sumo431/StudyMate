@@ -1,6 +1,8 @@
 # StudyMate
 Study support app: Efficient review of class content and support for test preparation
 
+### Android Application
+
 ## MVP
 ・Record and transcribe lectures
 
@@ -20,4 +22,8 @@ Study support app: Efficient review of class content and support for test prepar
   
   changed graph to check list
 
-### Android Application
+
+# No included in the MId demo, but added product
+・Add to favorite
+
+・login page
