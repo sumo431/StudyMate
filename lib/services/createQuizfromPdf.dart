@@ -12,6 +12,7 @@ Future<String> saveQuizToFirestore(String title, List<Map<String, dynamic>> quiz
     'questions': quiz,
     'highScore': 0,
     'createdAt': FieldValue.serverTimestamp(),
+    'isFavorite': false,
   });
 
   print("Quiz saved with ID: ${doc.id}");

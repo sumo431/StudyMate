@@ -37,8 +37,10 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
         }
 
         final data = snapshot.data!;
-        final List<Map<String, dynamic>> questions =
-        List<Map<String, dynamic>>.from(data['questions'] ?? []);
+        final questions = (data['questions'] as List<dynamic>?)
+            ?.map((q) => q as Map<String, dynamic>)
+            .toList() ??
+            [];
         highScore = data['highScore'] ?? 0;
 
         if (questions.isEmpty) {
@@ -77,7 +79,6 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
                 const SizedBox(height: 30),
                 ...List.generate(question['choices'].length, (i) {
                   final choiceText = question['choices'][i];
-                  final answerIndex = question['answerIndex'];
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -92,12 +93,15 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
                           ),
                         ),
                         onPressed: () {
-                          if (i == answerIndex) score++;
-                          if (current < questions.length - 1) {
-                            setState(() => current++);
-                          } else {
-                            finishQuiz(score, questions.length, data);
-                          }
+                          setState(() {
+                            if (i == question['answerIndex']) score++;
+
+                            if (current < questions.length - 1) {
+                              current++;
+                            } else {
+                              finishQuiz(score, questions.length);
+                            }
+                          });
                         },
                         child: Text(
                           choiceText,
@@ -118,34 +122,44 @@ class _QuizPlayPageState extends State<QuizPlayPage> {
     );
   }
 
-  void finishQuiz(int score, int total, DocumentSnapshot quiz) async {
-    final quizData = quiz.data() as Map<String, dynamic>?;
+  void finishQuiz(int score, int total) async {
+    final quizRef =
+    FirebaseFirestore.instance.collection('quizzes').doc(widget.quizId);
+    final quizSnapshot = await quizRef.get();
+    final quizData = quizSnapshot.data() as Map<String, dynamic>?;
+
     if (quizData != null &&
         (quizData['highScore'] == null || score > quizData['highScore'])) {
-      await quiz.reference.update({'highScore': score});
+      await quizRef.update({'highScore': score});
     }
 
-    await recordUserActivity();
+
+    try {
+      await recordUserActivity();
+    } catch (e) {
+      debugPrint('recordUserActivity failed: $e');
+    }
+
+
 
     if (!mounted) return;
 
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) =>
-          AlertDialog(
-            title: const Text("Result"),
-            content: Text("$score / $total"),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-                child: const Text("OK"),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text("Result"),
+        content: Text("You scored $score / $total"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            child: const Text("OK"),
           ),
+        ],
+      ),
     );
   }
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'HorizontalCardlist.dart' as hc;
-import 'package:capstone_2/button/bnb_custom_painter.dart';
-import 'record.dart';
-import 'savenote.dart';
-import 'package:capstone_2/notesview.dart';
+import 'package:capstone_2/button/custom_bottom.dart';
+import 'weelkyCalender.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +21,13 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 10),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: SizedBox(
+                height: 60,
+                child: WeeklyCalendar(), ),
+            ),
             const Padding(
               padding: EdgeInsets.only(top: 20, left: 20),
               child: Text(
@@ -82,77 +87,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        color: Colors.white10,
-        child: Stack(
-          children: [
-            CustomPaint(
-              size: Size(size.width, 80),
-              painter: BNBCustomPainter(),
-            ),
-            Center(
-              heightFactor: 0.6,
-              child: FloatingActionButton(
-                onPressed: ()async{
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const RecordPage()),
-                  );
-                  if (result != null) {
-                    print("New note: $result");
-                  }
-                },
-                backgroundColor: Colors.orange,
-                child: Icon(
-                    Icons.mic,
-                    color:Colors.white),
-                elevation: 0.1,
-                shape: CircleBorder(),
-              ),
-            ),
-            SizedBox(
-              width: size.width,
-              height: 80,
-              child: Row(
-                mainAxisAlignment:  MainAxisAlignment.spaceEvenly,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: IconButton(icon: Icon(Icons.home), onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const HomePage()),
-                      );
-                    }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 45),
-                    child: IconButton(icon: Icon(Icons.note_add), onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const SaveNotePage()),
-                      );
-                    }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 45),
-                    child: IconButton(icon: Icon(Icons.assignment), onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const NotesViewPage()),
-                      );
-                    }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: IconButton(icon: Icon(Icons.person), onPressed: () {}),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: const CustomBottomNavBar(),
     );
   }
 }
