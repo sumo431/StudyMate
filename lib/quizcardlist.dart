@@ -21,8 +21,8 @@ class QuizCardList extends StatelessWidget {
         if (quizzes.isEmpty) return const Center(child: Text("No quizzes available"));
 
         return ListView.builder(
-          shrinkWrap: true, // ← ここで高さを内容に合わせる
-          physics: const NeverScrollableScrollPhysics(), // ← 親のスクロールに任せる
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.all(10),
           itemCount: quizzes.length,
           itemBuilder: (context, index) {
