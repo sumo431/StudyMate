@@ -28,3 +28,7 @@ Study support app: Efficient review of class content and support for test prepar
 ・Add to favorite
 
 ・login page
+
+
+------------------------------------------------------------
+.env file and speech-to-text-key.json are not push at github
