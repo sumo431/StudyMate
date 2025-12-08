@@ -12,19 +12,20 @@ class RecordPage extends StatefulWidget {
 class _RecordPageState extends State<RecordPage> {
   final RecordService _recordService = RecordService();
 
-  Future<void> _toggleRecording() async {
+  void _toggleRecording() {
     if (_recordService.isRecording) {
-      await _recordService.stopRecording();
-      await _recordService.processRecording();
+      _recordService.stopRecording().then((_) {
+        _recordService.processRecording();
 
-      if (!mounted) return;
+        if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Recording complete!")),
-      );
-      setState(() {});
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Recording complete!")),
+        );
+        setState(() {});
+      });
     } else {
-      await _recordService.startRecordingLoop();
+      _recordService.startRecordingLoop();
 
       if (!mounted) return;
       setState(() {});

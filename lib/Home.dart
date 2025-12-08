@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'HorizontalCardlist.dart' as hc;
 import 'package:capstone_2/button/custom_bottom.dart';
 import 'weelkyCalender.dart';
+import 'package:capstone_2/quizcardlist.dart' as qc;
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -33,56 +35,28 @@ class _HomePageState extends State<HomePage> {
               child: Text(
                 "Notes",
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
             ),
             const hc.HorizontalCardList(),
-
             const SizedBox(height: 20),
-
             const Padding(
               padding: EdgeInsets.only(left: 20),
               child: Text(
                 "Practice",
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
             ),
-
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(20),
-                itemCount: 20, // サンプルアイテム数
-                itemBuilder: (context, index) {
-                  return Container(
-                    height: 80,
-                    margin: const EdgeInsets.only(bottom: 15),
-                    decoration: BoxDecoration(
-                      color: Colors.blueAccent[100],
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          blurRadius: 5,
-                          offset: const Offset(2, 2),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Practice Item ${index + 1}",
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                    ),
-                  );
-                },
-              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: qc.QuizCardList(), // QuizCardListは shrinkWrap: true, physics: NeverScrollableScrollPhysics() にする
             ),
           ],
         ),
