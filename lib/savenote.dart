@@ -21,6 +21,7 @@ class _SaveNotePageState extends State<SaveNotePage> {
     'assets/image/paint.jpg',
     'assets/image/dog.jpg',
     'assets/image/flowerandgirl.jpg',
+    'assets/image/dna.jpg',
   ];
 
   Future<void> _saveNote() async {
@@ -59,7 +60,7 @@ class _SaveNotePageState extends State<SaveNotePage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    //final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20.0),
