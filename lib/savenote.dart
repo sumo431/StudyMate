@@ -37,6 +37,7 @@ class _SaveNotePageState extends State<SaveNotePage> {
         'createdAt': FieldValue.serverTimestamp(),
         'image': selectedImage,
         'pdfs': [],
+        'isFavorite': false,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(

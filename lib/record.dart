@@ -43,7 +43,7 @@ class _RecordPageState extends State<RecordPage> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: _recordService.isRecording
-                  ? Colors.grey.shade200
+                  ? Colors.white
                   : Colors.grey.shade300,
             ),
             child: Icon(

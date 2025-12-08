@@ -63,7 +63,6 @@ class _NotesViewPageState extends State<NotesViewPage> {
                     final note = doc.data() as Map<String, dynamic>;
                     final image = note['image'];
                     final title = note['Title'];
-
                     return InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
@@ -74,50 +73,69 @@ class _NotesViewPageState extends State<NotesViewPage> {
                           ),
                         );
                       },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(12),
-                                  topRight: Radius.circular(12),
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
                                 ),
-                                child: Image.asset(
-                                  image ?? 'assets/image/candy.jpg',
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                    ),
+                                    child: Image.asset(
+                                      image ?? 'assets/image/candy.jpg',
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Container(
                                   width: double.infinity,
-                                  fit: BoxFit.cover,
+                                  padding: const EdgeInsets.all(6),
+                                  color: Colors.orangeAccent,
+                                  child: Text(
+                                    title ?? 'Untitled',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(6),
-                              color: Colors.orangeAccent,
-                              child: Text(
-                                title ?? 'Untitled',
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
+                          ),
+                          Positioned(
+                            top: 6,
+                            right: 6,
+                            child: IconButton(
+                              icon: Icon(
+                                note['isFavorite'] == true ? Icons.star : Icons.star_border,
+                                color: Colors.yellow[800],
                               ),
+                              onPressed: () {
+                                doc.reference.update({
+                                  'isFavorite': !(note['isFavorite'] == true),
+                                });
+                              },
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -125,7 +143,6 @@ class _NotesViewPageState extends State<NotesViewPage> {
               );
             },
           ),
-
           // ToggleButton
           Positioned(
             bottom: 80,

@@ -32,7 +32,7 @@ class RecordService {
     }
 
     isRecording = true;
-    const chunkDuration = Duration(minutes: 1);
+    const chunkDuration = Duration(seconds: 30);
 
     while (isRecording) {
       final filePath = await _getNewFilePath();

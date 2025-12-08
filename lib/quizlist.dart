@@ -49,6 +49,19 @@ class QuizListPage extends StatelessWidget {
                 child: ListTile(
                   contentPadding:
                   const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+
+                  leading: IconButton(
+                    icon: Icon(
+                      quiz['isFavorite'] == true ? Icons.star : Icons.star_border,
+                      color: Colors.orange,
+                    ),
+                    onPressed: () {
+                      quiz.reference.update({
+                        'isFavorite': !(quiz['isFavorite'] == true),
+                      });
+                    },
+                  ),
+
                   title: Text(
                     quiz['title'],
                     style: const TextStyle(
@@ -56,6 +69,7 @@ class QuizListPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+
                   subtitle: Text(
                     "High Score: ${quiz['highScore']}/${(quiz['questions'] as List).length}",
                     style: const TextStyle(
@@ -63,6 +77,7 @@ class QuizListPage extends StatelessWidget {
                       color: Colors.orange,
                     ),
                   ),
+
                   trailing: const Icon(Icons.arrow_forward_ios, size: 18),
                   onTap: () {
                     Navigator.push(

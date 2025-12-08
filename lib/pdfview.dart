@@ -55,10 +55,6 @@ class _PdfViewPageState extends State<PdfViewPage> {
                     child: ListTile(
                       leading: const Icon(Icons.picture_as_pdf, color: Colors.red),
                       title: Text(title),
-                      subtitle: Text(
-                        url ?? '',
-                        style: const TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
                       onTap: () {
                         if (url != null) {
                           Navigator.push(

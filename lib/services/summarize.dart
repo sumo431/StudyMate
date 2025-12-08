@@ -21,7 +21,7 @@ Future<String> summarizeText(String fullText) async {
           "parts": [
             {
               "text":
-              "Summarize the following meeting notes concisely in the Cornell note-taking format:\n\n$fullText"
+              "Summarize the following meeting notes concisely: \n\n$fullText"
             }
           ]
         }
