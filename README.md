@@ -11,11 +11,12 @@ Study support app: Efficient review of class content and support for test prepar
 ・Manage learning history -> store high scores
 
 
-##Opptional Product 
+
+## Opptional Product 
 
 ・Progress Visualization
 
-  Graph display study time, accuracy rate, and proficiency by subject area.
+  ~~Graph~~ display study time, accuracy rate, and proficiency by subject area.
   
   changed graph to check list
 
